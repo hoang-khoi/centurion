@@ -4,4 +4,7 @@ use thiserror::Error;
 pub enum RepositoryError {
     #[error("Internal repository error")]
     Internal,
+
+    #[error("Resource not found")]
+    NotFound,
 }

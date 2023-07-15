@@ -30,4 +30,14 @@ impl TaskBucketRepository for SimpleTaskBucketRepository {
 
         Ok(())
     }
+
+    async fn get_by_id(&self, id: &str) -> Result<TaskBucket, Report<RepositoryError>> {
+        self.bucket_map
+            .clone()
+            .lock()
+            .unwrap()
+            .get(id)
+            .ok_or(Report::new(RepositoryError::NotFound))
+            .cloned()
+    }
 }

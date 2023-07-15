@@ -8,4 +8,5 @@ pub mod simple;
 #[async_trait]
 pub trait TaskBucketRepository {
     async fn save(&self, task_bucket: &TaskBucket) -> Result<(), Report<RepositoryError>>;
+    async fn get_by_id(&self, id: &str) -> Result<TaskBucket, Report<RepositoryError>>;
 }
