@@ -1,0 +1,2 @@
+trait TaskBucketRepository {
+}
