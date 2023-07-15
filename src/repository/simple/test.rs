@@ -1,6 +1,6 @@
 use crate::model::aggregate::TaskBucket;
 use crate::repository::simple::test::utils::setup_repository;
-use crate::repository::TaskBucketRepository;
+use crate::repository::TaskRepository;
 
 #[tokio::test]
 async fn save_and_get_by_id() {
@@ -20,9 +20,9 @@ async fn save_and_get_by_id() {
 }
 
 mod utils {
-    use crate::repository::simple::SimpleTaskBucketRepository;
+    use crate::repository::simple::SimpleTaskRepository;
 
-    pub fn setup_repository() -> SimpleTaskBucketRepository {
-        SimpleTaskBucketRepository::new()
+    pub fn setup_repository() -> SimpleTaskRepository {
+        SimpleTaskRepository::new()
     }
 }
