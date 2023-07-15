@@ -5,7 +5,7 @@ use crate::model::error::ModelError;
 use error_stack::{IntoReport, Report, ResultExt};
 use validator::Validate;
 
-#[derive(Debug, Validate)]
+#[derive(Debug, Validate, Clone)]
 pub struct TaskBucket {
     #[validate(length(equal = 36))]
     id: String,
@@ -23,5 +23,12 @@ impl TaskBucket {
             .change_context(ModelError::InvalidValueObject)?;
 
         Ok(bucket)
+    }
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name
     }
 }
