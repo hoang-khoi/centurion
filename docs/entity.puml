@@ -1,7 +1,7 @@
 @startuml
 class TaskBucket {
     id: String
-    name: String
+    name: Option<String>
 }
 
 class Task {

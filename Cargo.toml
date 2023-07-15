@@ -8,3 +8,4 @@ tokio = { version = "1.28", features = ["full"] }
 error-stack = "0.3"
 thiserror = "1.0"
 validator = { version = "0.16", features = ["derive"] }
+async-trait = "0.1"
