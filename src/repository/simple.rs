@@ -1,6 +1,10 @@
+pub mod error;
+
 use crate::model::aggregate::TaskBucket;
+use crate::repository::simple::error::RepositoryError;
 use crate::repository::TaskBucketRepository;
 use async_trait::async_trait;
+use error_stack::Report;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
@@ -17,11 +21,13 @@ impl SimpleTaskBucketRepository {
 
 #[async_trait]
 impl TaskBucketRepository for SimpleTaskBucketRepository {
-    async fn save(&self, task_bucket: &TaskBucket) {
+    async fn save(&self, task_bucket: &TaskBucket) -> Result<(), Report<RepositoryError>> {
         self.bucket_map
             .clone()
             .lock()
             .unwrap()
             .insert(task_bucket.id().to_string(), task_bucket.clone());
+
+        Ok(())
     }
 }
