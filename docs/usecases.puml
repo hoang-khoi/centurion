@@ -1,0 +1,8 @@
+@startuml
+actor User
+User -> (Create/Update/Delete a Task Bucket)
+User --> (View Task Buckets)
+ (View Task Buckets) <.. (Select a Task Bucket): <<extend>>
+(Select a Task Bucket) <- (Create/Update a Task): <<extend>>
+(Select a Task Bucket) <.. (View A Task): <<extend>>
+@enduml

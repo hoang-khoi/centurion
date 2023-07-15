@@ -1,0 +1,48 @@
+@startuml
+class TaskBucket {
+    id: String
+    name: String
+}
+
+class Task {
+    id: String
+    name: String
+    type: TaskType
+    deadline: Option<u64>
+    comment: String
+}
+
+enum TaskType {
+    ONE_TIME
+    BREAKABLE
+    MEASURABLE
+}
+
+class OneTimeTask
+
+class BreakableTask {
+    subtasks: Vector<SubTask>
+}
+
+class MeasurableTask {
+    unit: String
+    required: usize
+    done: usize
+}
+
+class SubTask {
+    id: String,
+    name: String,
+    done: Boolean,
+}
+
+Task <|-- OneTimeTask
+Task <|-- BreakableTask
+Task <|-- MeasurableTask
+
+Task . TaskType
+
+SubTask -* BreakableTask
+
+TaskBucket --o Task
+@enduml
