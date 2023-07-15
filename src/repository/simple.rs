@@ -1,7 +1,5 @@
-pub mod error;
-
 use crate::model::aggregate::TaskBucket;
-use crate::repository::simple::error::RepositoryError;
+use crate::repository::error::RepositoryError;
 use crate::repository::TaskBucketRepository;
 use async_trait::async_trait;
 use error_stack::Report;
