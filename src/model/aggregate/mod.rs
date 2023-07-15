@@ -5,7 +5,7 @@ use crate::model::error::ModelError;
 use error_stack::{IntoReport, Report, ResultExt};
 use validator::Validate;
 
-#[derive(Debug, Validate, Clone)]
+#[derive(Debug, Validate, Clone, PartialEq, Eq)]
 pub struct TaskBucket {
     #[validate(length(equal = 36))]
     id: String,

@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod test;
+
 use crate::model::aggregate::TaskBucket;
 use crate::repository::error::RepositoryError;
 use crate::repository::TaskBucketRepository;
