@@ -12,10 +12,8 @@ mod task_bucket {
         let dummy_id = "751E367D-D586-4162-84F8-4690AF1EF796";
 
         for name in ids {
-            assert!(
-                TaskBucket::new(dummy_id.to_string(), Some(name.to_string()))
-                    .is_err_and(|e| e.current_context() == &ModelError::InvalidValueObject)
-            );
+            assert!(TaskBucket::new(dummy_id.to_string(), name.to_string())
+                .is_err_and(|e| e.current_context() == &ModelError::InvalidValueObject));
         }
     }
 
@@ -29,10 +27,8 @@ mod task_bucket {
         let dummy_name = "bucket";
 
         for id in ids {
-            assert!(
-                TaskBucket::new(id.to_string(), Some(dummy_name.to_string()))
-                    .is_err_and(|e| e.current_context() == &ModelError::InvalidValueObject)
-            );
+            assert!(TaskBucket::new(id.to_string(), dummy_name.to_string())
+                .is_err_and(|e| e.current_context() == &ModelError::InvalidValueObject));
         }
     }
 
@@ -46,7 +42,7 @@ mod task_bucket {
         let dummy_id = "751E367D-D586-4162-84F8-4690AF1EF796";
 
         for id in ids {
-            assert!(TaskBucket::new(dummy_id.to_string(), Some(id.to_string())).is_ok());
+            assert!(TaskBucket::new(dummy_id.to_string(), id.to_string()).is_ok());
         }
     }
 }

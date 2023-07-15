@@ -6,7 +6,7 @@ pub struct SimpleTaskBucketRepository;
 
 #[async_trait]
 impl TaskBucketRepository for SimpleTaskBucketRepository {
-    async fn create_or_update(&self, _task_bucket: &TaskBucket) {
+    async fn save(&self, _task_bucket: &TaskBucket) {
         todo!()
     }
 }

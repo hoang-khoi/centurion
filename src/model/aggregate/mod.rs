@@ -10,11 +10,11 @@ pub struct TaskBucket {
     #[validate(length(equal = 36))]
     id: String,
     #[validate(length(min = 4, max = 50))]
-    name: Option<String>,
+    name: String,
 }
 
 impl TaskBucket {
-    pub fn new(id: String, name: Option<String>) -> Result<Self, Report<ModelError>> {
+    pub fn new(id: String, name: String) -> Result<Self, Report<ModelError>> {
         let bucket = TaskBucket { id, name };
 
         bucket
