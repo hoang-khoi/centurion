@@ -13,7 +13,9 @@ async fn create_bucket_get_bucket() {
 
     service.create_bucket(&bucket).await.unwrap();
 
-    todo!()
+    let retrieved_bucket = service.get_bucket_by_id(bucket.id()).await.unwrap();
+
+    assert_eq!(bucket, retrieved_bucket);
 }
 
 mod utils {
