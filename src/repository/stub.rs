@@ -1,6 +1,6 @@
 use crate::model::aggregate::TaskBucket;
 use crate::repository::error::RepositoryError;
-use crate::repository::TaskRepository;
+use crate::repository::TaskBucketRepository;
 use async_trait::async_trait;
 use error_stack::Report;
 use std::collections::HashMap;
@@ -18,7 +18,7 @@ impl StubTaskRepository {
 }
 
 #[async_trait]
-impl TaskRepository for StubTaskRepository {
+impl TaskBucketRepository for StubTaskRepository {
     async fn save(&self, task_bucket: &TaskBucket) -> Result<(), Report<RepositoryError>> {
         self.bucket_map
             .clone()
