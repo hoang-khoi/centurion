@@ -1,4 +1,5 @@
 syntax = "proto3";
+package centurion;
 
 message TaskBucket {
   string id = 1;

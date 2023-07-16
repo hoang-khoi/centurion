@@ -1,6 +1,8 @@
 syntax = "proto3";
 import "messages.proto";
 
+package centurion;
+
 service TaskService {
   rpc CreateBucket(CreateBucketRequest) returns (CreateBucketResponse);
   rpc GetBucketById(CreateBucketRequest) returns (GetBucketByIdResponse);
