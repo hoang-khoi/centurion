@@ -12,6 +12,7 @@ use error_stack::{Report, ResultExt};
 trait TaskService {
     async fn create_bucket(&self, bucket: &TaskBucket) -> Result<(), Report<ServiceError>>;
     async fn get_bucket_by_id(&self, id: &str) -> Result<TaskBucket, Report<ServiceError>>;
+    async fn get_buckets(&self) -> Result<Vec<TaskBucket>, Report<ServiceError>>;
 }
 
 pub struct TaskServiceImpl<TaskBucketRepositoryT: TaskBucketRepository> {
@@ -38,6 +39,13 @@ impl<TaskRepositoryT: TaskBucketRepository> TaskService for TaskServiceImpl<Task
     async fn get_bucket_by_id(&self, id: &str) -> Result<TaskBucket, Report<ServiceError>> {
         self.task_bucket_repository
             .get_by_id(id)
+            .await
+            .change_context(ServiceError::Internal)
+    }
+
+    async fn get_buckets(&self) -> Result<Vec<TaskBucket>, Report<ServiceError>> {
+        self.task_bucket_repository
+            .get_all()
             .await
             .change_context(ServiceError::Internal)
     }
