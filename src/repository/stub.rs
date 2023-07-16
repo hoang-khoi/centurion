@@ -38,4 +38,17 @@ impl TaskBucketRepository for StubTaskRepository {
             .ok_or(Report::new(RepositoryError::NotFound))
             .cloned()
     }
+
+    async fn get_all(&self) -> Result<Vec<TaskBucket>, Report<RepositoryError>> {
+        let buckets: Vec<TaskBucket> = self
+            .bucket_map
+            .clone()
+            .lock()
+            .unwrap()
+            .iter()
+            .map(|(_, bucket)| bucket.clone())
+            .collect();
+
+        Ok(buckets)
+    }
 }
