@@ -2,10 +2,8 @@ use crate::model::aggregate::TaskBucket;
 use crate::service::test::utils::setup_service;
 use crate::service::TaskService;
 
-mod stub;
-
 #[tokio::test]
-async fn create_bucket() {
+async fn create_bucket_get_bucket() {
     let service = setup_service();
     let bucket = TaskBucket::new(
         "751E367D-D586-4162-84F8-4690AF1EF796".to_string(),
@@ -15,14 +13,14 @@ async fn create_bucket() {
 
     service.create_bucket(&bucket).await.unwrap();
 
-    assert!(service.task_repository.is_bucket_saved(&bucket));
+    todo!()
 }
 
 mod utils {
-    use crate::service::test::stub::TaskRepositoryStub;
+    use crate::repository::stub::StubTaskRepository;
     use crate::service::TaskServiceImpl;
 
-    pub fn setup_service() -> TaskServiceImpl<TaskRepositoryStub> {
-        TaskServiceImpl::new(TaskRepositoryStub::new())
+    pub fn setup_service() -> TaskServiceImpl<StubTaskRepository> {
+        TaskServiceImpl::new(StubTaskRepository::new())
     }
 }

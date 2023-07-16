@@ -1,6 +1,3 @@
-#[cfg(test)]
-mod test;
-
 use crate::model::aggregate::TaskBucket;
 use crate::repository::error::RepositoryError;
 use crate::repository::TaskRepository;
@@ -9,11 +6,11 @@ use error_stack::Report;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-pub struct SimpleTaskRepository {
+pub struct StubTaskRepository {
     bucket_map: Arc<Mutex<HashMap<String, TaskBucket>>>,
 }
 
-impl SimpleTaskRepository {
+impl StubTaskRepository {
     pub fn new() -> Self {
         let bucket_map = Arc::new(Mutex::new(HashMap::new()));
         Self { bucket_map }
@@ -21,7 +18,7 @@ impl SimpleTaskRepository {
 }
 
 #[async_trait]
-impl TaskRepository for SimpleTaskRepository {
+impl TaskRepository for StubTaskRepository {
     async fn save(&self, task_bucket: &TaskBucket) -> Result<(), Report<RepositoryError>> {
         self.bucket_map
             .clone()

@@ -1,5 +1,5 @@
 pub mod error;
-pub mod simple;
+pub mod stub;
 
 use crate::model::aggregate::TaskBucket;
 use crate::repository::error::RepositoryError;
