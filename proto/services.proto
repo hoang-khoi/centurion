@@ -1,10 +1,12 @@
 syntax = "proto3";
+
+import "google/protobuf/empty.proto";
 import "messages.proto";
 
 package centurion;
 
 service TaskService {
-  rpc CreateBucket(CreateBucketRequest) returns (CreateBucketResponse);
+  rpc CreateBucket(CreateBucketRequest) returns (google.protobuf.Empty);
   rpc GetBucketById(CreateBucketRequest) returns (GetBucketByIdResponse);
   rpc GetBuckets(GetBucketsRequest) returns (GetBucketsResponse);
 }

@@ -12,7 +12,7 @@ pub trait TaskBucketRepository: Send + Sync + 'static {
     async fn create(
         &self,
         request: ParsedCreateBucketRequest,
-    ) -> Result<TaskBucket, Report<RepositoryError>>;
+    ) -> Result<(), Report<RepositoryError>>;
     async fn get_by_id(&self, id: &str) -> Result<TaskBucket, Report<RepositoryError>>;
     async fn get_all(&self) -> Result<Vec<TaskBucket>, Report<RepositoryError>>;
 }

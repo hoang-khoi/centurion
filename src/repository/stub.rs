@@ -28,13 +28,11 @@ impl TaskBucketRepository for StubTaskRepository<UuidIdService> {
     async fn create(
         &self,
         request: ParsedCreateBucketRequest,
-    ) -> Result<TaskBucket, Report<RepositoryError>> {
+    ) -> Result<(), Report<RepositoryError>> {
         let bucket = TaskBucket::new(
             self.id_service.clone().lock().unwrap().generate(),
             request.name().to_string(),
         );
-
-        let return_bucket = bucket.clone();
 
         self.bucket_map
             .clone()
@@ -42,7 +40,7 @@ impl TaskBucketRepository for StubTaskRepository<UuidIdService> {
             .unwrap()
             .insert(bucket.id().to_string(), bucket);
 
-        Ok(return_bucket)
+        Ok(())
     }
 
     async fn get_by_id(&self, id: &str) -> Result<TaskBucket, Report<RepositoryError>> {
