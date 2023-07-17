@@ -2,6 +2,7 @@ pub mod error;
 pub mod grpc {
     tonic::include_proto!("centurion");
 }
+pub mod factory;
 
 use crate::model::aggregate::TaskBucket;
 use crate::model::error::ModelError;

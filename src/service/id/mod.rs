@@ -1,3 +1,5 @@
+pub mod factory;
+
 use uuid::Uuid;
 
 pub trait IdService: Send + Sync + 'static {
