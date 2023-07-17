@@ -1,6 +1,6 @@
 use uuid::Uuid;
 
-pub trait IdService {
+pub trait IdService: Send + Sync + 'static {
     fn generate(&self) -> String;
 }
 

@@ -3,6 +3,7 @@ pub mod grpc {
     tonic::include_proto!("centurion");
 }
 
+use crate::model::aggregate::TaskBucket;
 use crate::model::error::ModelError;
 use crate::model::value_object::ParsedCreateBucketRequest;
 use crate::repository::TaskBucketRepository;
@@ -10,24 +11,39 @@ use crate::service::grpc::grpc::task_service_server::TaskService;
 use crate::service::grpc::grpc::{
     CreateBucketRequest, GetBucketByIdResponse, GetBucketsRequest, GetBucketsResponse,
 };
+use crate::service::id::IdService;
 use async_trait::async_trait;
 use error_stack::Report;
 use tonic::{Request, Response, Status};
 
-pub struct TaskServiceImpl<TaskBucketRepositoryT: TaskBucketRepository> {
+pub struct TaskServiceImpl<TaskBucketRepositoryT, IdServiceT>
+where
+    TaskBucketRepositoryT: TaskBucketRepository,
+    IdServiceT: IdService,
+{
     task_bucket_repository: TaskBucketRepositoryT,
+    id_service: IdServiceT,
 }
 
-impl<TaskRepositoryT: TaskBucketRepository> TaskServiceImpl<TaskRepositoryT> {
-    pub fn new(task_repository: TaskRepositoryT) -> Self {
+impl<TaskRepositoryT, IdServiceT> TaskServiceImpl<TaskRepositoryT, IdServiceT>
+where
+    TaskRepositoryT: TaskBucketRepository,
+    IdServiceT: IdService,
+{
+    pub fn new(task_bucket_repository: TaskRepositoryT, id_service: IdServiceT) -> Self {
         Self {
-            task_bucket_repository: task_repository,
+            task_bucket_repository,
+            id_service,
         }
     }
 }
 
 #[async_trait]
-impl<TaskRepositoryT: TaskBucketRepository> TaskService for TaskServiceImpl<TaskRepositoryT> {
+impl<TaskRepositoryT, IdServiceT> TaskService for TaskServiceImpl<TaskRepositoryT, IdServiceT>
+where
+    TaskRepositoryT: TaskBucketRepository,
+    IdServiceT: IdService,
+{
     async fn create_bucket(
         &self,
         request: Request<CreateBucketRequest>,
@@ -40,10 +56,12 @@ impl<TaskRepositoryT: TaskBucketRepository> TaskService for TaskServiceImpl<Task
             status
         })?;
 
-        self.task_bucket_repository
-            .create(parsed_request)
-            .await
-            .unwrap();
+        let bucket = TaskBucket::new(
+            self.id_service.generate(),
+            parsed_request.name().to_string(),
+        );
+
+        self.task_bucket_repository.create(&bucket).await.unwrap();
 
         Ok(Response::new(()))
     }
