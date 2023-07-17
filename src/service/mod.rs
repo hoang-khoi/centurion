@@ -1,52 +1,53 @@
+use async_trait::async_trait;
+use tonic::{Request, Response, Status};
+
+use crate::repository::TaskBucketRepository;
+use crate::service::grpc::task_service_server::TaskService;
+use crate::service::grpc::{
+    CreateBucketRequest, CreateBucketResponse, GetBucketByIdResponse, GetBucketsRequest,
+    GetBucketsResponse,
+};
+
 pub mod error;
+pub mod grpc {
+    tonic::include_proto!("centurion");
+}
+
 #[cfg(test)]
 mod test;
 
-use crate::model::aggregate::TaskBucket;
-use crate::repository::TaskBucketRepository;
-use crate::service::error::ServiceError;
-use async_trait::async_trait;
-use error_stack::{Report, ResultExt};
-
-#[async_trait]
-trait TaskService {
-    async fn create_bucket(&self, bucket: &TaskBucket) -> Result<(), Report<ServiceError>>;
-    async fn get_bucket_by_id(&self, id: &str) -> Result<TaskBucket, Report<ServiceError>>;
-    async fn get_buckets(&self) -> Result<Vec<TaskBucket>, Report<ServiceError>>;
-}
-
 pub struct TaskServiceImpl<TaskBucketRepositoryT: TaskBucketRepository> {
-    task_bucket_repository: TaskBucketRepositoryT,
+    _task_bucket_repository: TaskBucketRepositoryT,
 }
 
 impl<TaskRepositoryT: TaskBucketRepository> TaskServiceImpl<TaskRepositoryT> {
     pub fn new(task_repository: TaskRepositoryT) -> Self {
         Self {
-            task_bucket_repository: task_repository,
+            _task_bucket_repository: task_repository,
         }
     }
 }
 
 #[async_trait]
 impl<TaskRepositoryT: TaskBucketRepository> TaskService for TaskServiceImpl<TaskRepositoryT> {
-    async fn create_bucket(&self, bucket: &TaskBucket) -> Result<(), Report<ServiceError>> {
-        self.task_bucket_repository
-            .save(bucket)
-            .await
-            .change_context(ServiceError::Internal)
+    async fn create_bucket(
+        &self,
+        _request: Request<CreateBucketRequest>,
+    ) -> Result<Response<CreateBucketResponse>, Status> {
+        todo!()
     }
 
-    async fn get_bucket_by_id(&self, id: &str) -> Result<TaskBucket, Report<ServiceError>> {
-        self.task_bucket_repository
-            .get_by_id(id)
-            .await
-            .change_context(ServiceError::Internal)
+    async fn get_bucket_by_id(
+        &self,
+        _request: Request<CreateBucketRequest>,
+    ) -> Result<Response<GetBucketByIdResponse>, Status> {
+        todo!()
     }
 
-    async fn get_buckets(&self) -> Result<Vec<TaskBucket>, Report<ServiceError>> {
-        self.task_bucket_repository
-            .get_all()
-            .await
-            .change_context(ServiceError::Internal)
+    async fn get_buckets(
+        &self,
+        _request: Request<GetBucketsRequest>,
+    ) -> Result<Response<GetBucketsResponse>, Status> {
+        todo!()
     }
 }

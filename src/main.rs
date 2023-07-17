@@ -1,6 +1,6 @@
 pub mod model;
-pub mod service;
 pub mod repository;
+pub mod service;
 
 fn main() {
     println!("Hello, world!");
