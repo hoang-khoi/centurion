@@ -1,10 +1,10 @@
 use uuid::Uuid;
 
-trait IdService {
+pub trait IdService {
     fn generate(&self) -> String;
 }
 
-struct UuidIdService;
+pub struct UuidIdService;
 
 impl IdService for UuidIdService {
     fn generate(&self) -> String {

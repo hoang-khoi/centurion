@@ -21,6 +21,10 @@ impl ParsedCreateBucketRequest {
 
         Ok(request)
     }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
 }
 
 impl TryFrom<Request<CreateBucketRequest>> for ParsedCreateBucketRequest {

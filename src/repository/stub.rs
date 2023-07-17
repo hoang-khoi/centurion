@@ -1,32 +1,48 @@
 use crate::model::aggregate::TaskBucket;
+use crate::model::value_object::ParsedCreateBucketRequest;
 use crate::repository::error::RepositoryError;
 use crate::repository::TaskBucketRepository;
+use crate::service::id::{IdService, UuidIdService};
 use async_trait::async_trait;
 use error_stack::Report;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
-pub struct StubTaskRepository {
+pub struct StubTaskRepository<IdServiceT: IdService> {
     bucket_map: Arc<Mutex<HashMap<String, TaskBucket>>>,
+    id_service: Arc<Mutex<IdServiceT>>,
 }
 
-impl StubTaskRepository {
+impl StubTaskRepository<UuidIdService> {
     pub fn new() -> Self {
         let bucket_map = Arc::new(Mutex::new(HashMap::new()));
-        Self { bucket_map }
+        Self {
+            bucket_map,
+            id_service: Arc::new(Mutex::new(UuidIdService {})),
+        }
     }
 }
 
 #[async_trait]
-impl TaskBucketRepository for StubTaskRepository {
-    async fn save(&self, task_bucket: &TaskBucket) -> Result<(), Report<RepositoryError>> {
+impl TaskBucketRepository for StubTaskRepository<UuidIdService> {
+    async fn create(
+        &self,
+        request: ParsedCreateBucketRequest,
+    ) -> Result<TaskBucket, Report<RepositoryError>> {
+        let bucket = TaskBucket::new(
+            self.id_service.clone().lock().unwrap().generate(),
+            request.name().to_string(),
+        );
+
+        let return_bucket = bucket.clone();
+
         self.bucket_map
             .clone()
             .lock()
             .unwrap()
-            .insert(task_bucket.id().to_string(), task_bucket.clone());
+            .insert(bucket.id().to_string(), bucket);
 
-        Ok(())
+        Ok(return_bucket)
     }
 
     async fn get_by_id(&self, id: &str) -> Result<TaskBucket, Report<RepositoryError>> {
