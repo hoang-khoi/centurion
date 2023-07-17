@@ -35,7 +35,7 @@ impl<TaskRepositoryT: TaskBucketRepository> TaskService for TaskServiceImpl<Task
 
     async fn get_bucket_by_id(
         &self,
-        _request: Request<crate::service::grpc::CreateBucketRequest>,
+        _request: Request<CreateBucketRequest>,
     ) -> Result<Response<GetBucketByIdResponse>, Status> {
         todo!()
     }

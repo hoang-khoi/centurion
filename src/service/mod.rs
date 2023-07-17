@@ -1,2 +1,2 @@
-mod grpc;
-mod id;
+pub mod grpc;
+pub mod id;
