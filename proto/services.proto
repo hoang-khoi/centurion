@@ -8,7 +8,7 @@ package centurion;
 service TaskService {
   rpc CreateBucket(CreateBucketRequest) returns (google.protobuf.Empty);
   rpc GetBucketById(GetBucketByIdRequest) returns (GetBucketByIdResponse);
-  rpc GetBuckets(GetBucketsRequest) returns (GetBucketsResponse);
+  rpc GetBuckets(google.protobuf.Empty) returns (GetBucketsResponse);
 }
 
 message CreateBucketRequest {
@@ -27,7 +27,6 @@ message GetBucketByIdResponse {
   TaskBucket bucket = 1;
 }
 
-message GetBucketsRequest {}
 message GetBucketsResponse {
   repeated TaskBucket buckets = 1;
 }

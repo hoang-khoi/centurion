@@ -1,6 +1,6 @@
 use crate::service::grpc::grpc;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct TaskBucket {
     id: String,
     name: String,

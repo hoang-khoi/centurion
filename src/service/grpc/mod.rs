@@ -4,6 +4,9 @@ pub mod grpc {
 }
 pub mod factory;
 
+#[cfg(test)]
+mod test;
+
 use crate::model::aggregate::TaskBucket;
 use crate::model::error::ModelError;
 use crate::model::value_object::{ParsedCreateBucketRequest, ParsedGetBucketByIdRequest};
@@ -11,8 +14,7 @@ use crate::repository::error::RepositoryError;
 use crate::repository::TaskBucketRepository;
 use crate::service::grpc::grpc::task_service_server::TaskService;
 use crate::service::grpc::grpc::{
-    CreateBucketRequest, GetBucketByIdRequest, GetBucketByIdResponse, GetBucketsRequest,
-    GetBucketsResponse,
+    CreateBucketRequest, GetBucketByIdRequest, GetBucketByIdResponse, GetBucketsResponse,
 };
 use crate::service::id::IdService;
 use async_trait::async_trait;
@@ -92,7 +94,7 @@ where
 
     async fn get_buckets(
         &self,
-        _request: Request<GetBucketsRequest>,
+        _request: Request<()>,
     ) -> Result<Response<GetBucketsResponse>, Status> {
         let buckets = self.task_bucket_repository.get_all().await.map_err(|e| {
             log_if_repository_internal_error(&e);
