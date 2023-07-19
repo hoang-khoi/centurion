@@ -91,6 +91,13 @@ where
         &self,
         _request: Request<GetBucketsRequest>,
     ) -> Result<Response<GetBucketsResponse>, Status> {
-        todo!()
+        let buckets = self.task_bucket_repository.get_all().await.map_err(|e| {
+            let status: Status = e.current_context().into();
+            status
+        })?;
+
+        Ok(Response::new(GetBucketsResponse {
+            buckets: buckets.into_iter().map(|bucket| bucket.into()).collect(),
+        }))
     }
 }
