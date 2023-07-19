@@ -1,3 +1,5 @@
+use crate::service::grpc::grpc;
+
 #[derive(Debug, Clone)]
 pub struct TaskBucket {
     id: String,
@@ -14,5 +16,14 @@ impl TaskBucket {
 
     pub fn name(&self) -> &str {
         &self.name
+    }
+}
+
+impl From<TaskBucket> for grpc::TaskBucket {
+    fn from(bucket: TaskBucket) -> Self {
+        Self {
+            id: bucket.id,
+            name: bucket.name,
+        }
     }
 }

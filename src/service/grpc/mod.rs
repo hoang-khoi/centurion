@@ -6,11 +6,12 @@ pub mod factory;
 
 use crate::model::aggregate::TaskBucket;
 use crate::model::error::ModelError;
-use crate::model::value_object::ParsedCreateBucketRequest;
+use crate::model::value_object::{ParsedCreateBucketRequest, ParsedGetBucketByIdRequest};
 use crate::repository::TaskBucketRepository;
 use crate::service::grpc::grpc::task_service_server::TaskService;
 use crate::service::grpc::grpc::{
-    CreateBucketRequest, GetBucketByIdResponse, GetBucketsRequest, GetBucketsResponse,
+    CreateBucketRequest, GetBucketByIdRequest, GetBucketByIdResponse, GetBucketsRequest,
+    GetBucketsResponse,
 };
 use crate::service::id::IdService;
 use async_trait::async_trait;
@@ -69,9 +70,21 @@ where
 
     async fn get_bucket_by_id(
         &self,
-        _request: Request<CreateBucketRequest>,
+        request: Request<GetBucketByIdRequest>,
     ) -> Result<Response<GetBucketByIdResponse>, Status> {
-        todo!()
+        let parsed_request: ParsedGetBucketByIdRequest = request.into();
+        let bucket = self
+            .task_bucket_repository
+            .get_by_id(&parsed_request.id)
+            .await
+            .map_err(|e| {
+                let status: Status = e.current_context().into();
+                status
+            })?;
+
+        Ok(Response::new(GetBucketByIdResponse {
+            bucket: Some(bucket.into()),
+        }))
     }
 
     async fn get_buckets(
