@@ -7,6 +7,7 @@ pub mod factory;
 use crate::model::aggregate::TaskBucket;
 use crate::model::error::ModelError;
 use crate::model::value_object::{ParsedCreateBucketRequest, ParsedGetBucketByIdRequest};
+use crate::repository::error::RepositoryError;
 use crate::repository::TaskBucketRepository;
 use crate::service::grpc::grpc::task_service_server::TaskService;
 use crate::service::grpc::grpc::{
@@ -16,6 +17,7 @@ use crate::service::grpc::grpc::{
 use crate::service::id::IdService;
 use async_trait::async_trait;
 use error_stack::Report;
+use log::error;
 use tonic::{Request, Response, Status};
 
 pub struct TaskServiceImpl<TaskBucketRepositoryT, IdServiceT>
@@ -78,6 +80,7 @@ where
             .get_by_id(&parsed_request.id)
             .await
             .map_err(|e| {
+                log_if_repository_internal_error(&e);
                 let status: Status = e.current_context().into();
                 status
             })?;
@@ -92,6 +95,7 @@ where
         _request: Request<GetBucketsRequest>,
     ) -> Result<Response<GetBucketsResponse>, Status> {
         let buckets = self.task_bucket_repository.get_all().await.map_err(|e| {
+            log_if_repository_internal_error(&e);
             let status: Status = e.current_context().into();
             status
         })?;
@@ -99,5 +103,11 @@ where
         Ok(Response::new(GetBucketsResponse {
             buckets: buckets.into_iter().map(|bucket| bucket.into()).collect(),
         }))
+    }
+}
+
+fn log_if_repository_internal_error(report: &Report<RepositoryError>) {
+    if let RepositoryError::Internal = report.current_context() {
+        error!("Internal repository error: {:?}", report);
     }
 }
